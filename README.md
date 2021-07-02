@@ -9,13 +9,18 @@ To run each service call
 
 Using examples from "Reactive Spring" by Josh Long
 
-## Eureka server
+# Eureka server
 Run it before other examples.
 
 Server running on default port 8761.
 
+# Services
+
+Each service starts on random port and registers itself in Eureka service.
+
+
 ## Customer Service
-Returns list of customers and can add delay to response. Application starts on random port and registers in Eureka service.
+Returns list of customers and can add delay to response.
 
 Sample usage:
 ```
@@ -40,7 +45,7 @@ Gets three customers with delay:
 ```
 
 ## Orders Service
-Returns list of cusorders for customers. Application starts on random port and registers in Eureka service.
+Returns list of orders for customers.
 
 Sample usage:
 ```
@@ -58,4 +63,48 @@ Gets three customers with delay:
     "customerId": 10
   }
 ]
+```
+
+## Profiles Service
+Returns profile of a customer. 
+
+Sample usage:
+```
+GET http://localhost:55616/profiles/10
+```
+Gets three customers with delay:
+```json
+{
+  "id": 10,
+  "username": "richard",
+  "password": "10c363cc-50f8-459e-a595-31298fc82835"
+}
+```
+
+## Error Service
+### Returns `500` error always
+```
+GET http://localhost:55617/cb
+```
+### Counts attempts to get data
+```
+GET http://localhost:55950/ok?uid=1e457fc3-74b1-4dff-a715-828d3835e7f6
+```
+
+Response example:
+```json
+{
+  "greeting": "greeting attempt 4 on port 55950"
+}
+```
+
+### Counts attemts and returns 500 error if number of attempts is less than 3 or returns response
+```
+GET http://localhost:55950/retry?uid=1e457fc3-74b1-4dff-a715-828d3835e7f6
+```
+Response example:
+```json
+{
+  "greeting": "greeting attempt 4 on port 55950"
+}
 ```
