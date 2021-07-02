@@ -108,3 +108,20 @@ Response example:
   "greeting": "greeting attempt 4 on port 55950"
 }
 ```
+
+## Slow Service
+Returns deleayed greeting response
+```
+GET http://localhost:56441/greetings/?name=John
+```
+Response example:
+```json
+{
+  "message": "Hello, John! (from 56441 took 2(s))"
+}
+```
+You can change delay by running:
+```bash
+export service_delay=3 && ./gradlew bootRun
+```
+or editing value in `application.properties`.
