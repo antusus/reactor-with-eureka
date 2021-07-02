@@ -36,3 +36,24 @@ Gets three customers with delay:
   }
 ]
 ```
+
+## Orders Service
+Returns list of cusorders for customers. Application starts on random port and registers in Eureka service.
+
+Sample usage:
+```
+GET http://localhost:54905/orders?ids=10
+```
+Gets three customers with delay:
+```json
+[
+  {
+    "id": "1ccd6836-cfcc-4179-a23a-b48126beb75b",
+    "customerId": 10
+  },
+  {
+    "id": "bcb67ee1-35e5-4381-9df9-2868810fc057",
+    "customerId": 10
+  }
+]
+```
