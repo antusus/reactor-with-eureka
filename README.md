@@ -2,6 +2,10 @@
 Playing with project reactor and Netflix Eureka with Spring Cloud.
 
 Requires Java 16 to run.
+To run each service call 
+```bash
+./gradlew bootRun
+```
 
 Using examples from "Reactive Spring" by Josh Long
 
@@ -9,8 +13,6 @@ Using examples from "Reactive Spring" by Josh Long
 Run it before other examples.
 
 Server running on default port 8761.
-
-To run call `./gradlew bootRun`.
 
 ## Customer Service
 Returns list of customers and can add delay to response. Application starts on random port and registers in Eureka service.
