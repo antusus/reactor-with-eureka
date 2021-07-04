@@ -132,4 +132,5 @@ The client project contain sample Client application.
 
  - **OrdersClient** gets orders
  - **RetryClient** uses ressilience4j and specifies Retry policy when requests fails
+ - **CircuitBreakerClient** uses Circuit Breaker to fail fast. Retries 10 times to get greeting. 
 
