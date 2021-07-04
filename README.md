@@ -125,3 +125,11 @@ You can change delay by running:
 export service_delay=3 && ./gradlew bootRun
 ```
 or editing value in `application.properties`.
+
+# Client
+The client project contain sample Client application.
+**WebClientAutoConfiguration** overrides default load balancer settings and switches DNS lookup for Eureka service lookup. This way we can use `http://order-service` URI to get current location of Order Service.
+
+ - **OrdersClient** gets orders
+ - **RetryClient** uses ressilience4j and specifies Retry policy when requests fails
+
