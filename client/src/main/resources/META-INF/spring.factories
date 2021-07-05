@@ -1,2 +1,3 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  pl.kamil.reactorplayground.client.CircuitBreakerConfiguration
+  pl.kamil.reactorplayground.client.CircuitBreakerConfiguration,\
+  pl.kamil.reactorplayground.client.RateLimiterConfiguration
