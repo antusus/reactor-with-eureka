@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
-import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 import java.util.UUID;
@@ -18,21 +17,18 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Component
 public class RateLimiterClient implements ApplicationListener<ApplicationReadyEvent> {
   private static final Logger log = LoggerFactory.getLogger(RateLimiterClient.class);
-  private final WebClient webClient;
+  private final GreetingClient client;
   private final RateLimiter rateLimiter;
   private final AtomicInteger successes = new AtomicInteger();
   private final AtomicInteger failures = new AtomicInteger();
 
-  RateLimiterClient(WebClientFactory webClientFactory, RateLimiterRegistry rateLimiterRegistry) {
-    webClient = webClientFactory.create().baseUrl("http://error-service/ok").build();
+  RateLimiterClient(GreetingClient greetingClient, RateLimiterRegistry rateLimiterRegistry) {
+    client = greetingClient;
     rateLimiter = rateLimiterRegistry.rateLimiter("greetings", RateLimiterConfiguration.CUSTOM);
   }
 
   public Mono<String> greet(UUID uuid) {
-    return webClient.get()
-        .uri(b -> b.queryParam("uid", uuid.toString()).build())
-        .retrieve()
-        .bodyToMono(String.class)
+    return client.greet(uuid)
         .transformDeferred(RateLimiterOperator.of(rateLimiter));
   }
 

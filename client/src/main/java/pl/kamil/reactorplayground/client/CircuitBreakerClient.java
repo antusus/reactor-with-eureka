@@ -21,18 +21,16 @@ import static pl.kamil.reactorplayground.client.CircuitBreakerConfiguration.GREE
 public class CircuitBreakerClient implements ApplicationListener<ApplicationReadyEvent> {
 
   private static final Logger log = LoggerFactory.getLogger(CircuitBreakerClient.class);
-  private final WebClient webClient;
+  private final GreetingClient client;
   private final CircuitBreaker circuitBreaker;
 
-  CircuitBreakerClient(WebClientFactory webClientFactory, CircuitBreakerRegistry circuitBreakerRegistry) {
+  CircuitBreakerClient(GreetingClient greetingClient, CircuitBreakerRegistry circuitBreakerRegistry) {
+    client = greetingClient;
     this.circuitBreaker = circuitBreakerRegistry.circuitBreaker("greetings", GREETINGS);
-    webClient = webClientFactory.create().baseUrl("http://error-service/cb").build();
   }
 
   public Mono<String> greet(UUID uuid) {
-    return webClient.get().uri(b -> b.queryParam("uid", uuid.toString()).build())
-        .retrieve()
-        .bodyToMono(String.class)
+    return client.greetThatFailsSometimes(uuid)
         .transformDeferred(CircuitBreakerOperator.of(circuitBreaker));
   }
 

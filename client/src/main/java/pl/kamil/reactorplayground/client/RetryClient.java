@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
-import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 import reactor.util.retry.Retry;
 
@@ -15,20 +14,14 @@ import java.util.UUID;
 @Component
 public class RetryClient implements ApplicationListener<ApplicationReadyEvent> {
   private static final Logger log = LoggerFactory.getLogger(RetryClient.class);
-  private final WebClient webClient;
+  private final GreetingClient client;
 
-  public RetryClient(WebClientFactory webClientFactory) {
-
-    this.webClient = webClientFactory.create()
-        .baseUrl("http://error-service/retry")
-        .build();
+  public RetryClient(GreetingClient greetingClient) {
+    this.client = greetingClient;
   }
 
   public Mono<String> greet(UUID uuid) {
-    return this.webClient.get()
-        .uri(b -> b.queryParam("uid", uuid.toString()).build())
-        .retrieve()
-        .bodyToMono(String.class)
+    return client.greetAfterTwoRetries(uuid)
         .retryWhen(retryPolicy());
   }
 
